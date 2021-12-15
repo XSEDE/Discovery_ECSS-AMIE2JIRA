@@ -206,8 +206,8 @@ class AMIE2JIRA():
         self.api_key=self.site_config['api_key']
         self.jira_url = self.site_config['jira_url']
         self.jira_key = self.site_config['jira_key']
-        self.no_post = self.site_config['no_post']
-        self.no_npc = self.site_config['no_npc']
+        self.no_post = self.site_config.getboolean('no_post')
+        self.no_npc = self.site_config.getboolean('no_npc')
 
         if not self.site_name:
             eprint('Config is missing site_name')
@@ -245,7 +245,7 @@ class AMIE2JIRA():
         self.logger.setLevel(loglevel_num)
         self.formatter = logging.Formatter(fmt='%(asctime)s.%(msecs)03d %(levelname)s %(message)s', \
                                            datefmt='%Y/%m/%d %H:%M:%S')
-        self.LOG_FILE = self.site_config.get('LOG_FILE', 'var/xsede-oauth-mapfile.log')
+        self.LOG_FILE = self.site_config.get('LOG_FILE', 'var/amie2jira.log')
         self.handler = logging.handlers.TimedRotatingFileHandler(self.LOG_FILE, \
             when='W6', backupCount=999, utc=True)
         self.handler.setFormatter(self.formatter)
@@ -304,7 +304,7 @@ class AMIE2JIRA():
         if RequestType not in ["New", "Renewal", "Supplemental", "Justification"]:
            highest = process.extractOne(RequestType,RequestTypeList)
            RequestType = highest[0]
-           self.logger.info('RequestType chosen as {} for {}'.format((RequestType, packet.RequestType)))
+           self.logger.info('RequestType chosen as {} for {}'.format(RequestType, packet.RequestType))
         if packet.PfosNumber not in FoS.keys():
             fieldofscience = ""
         else:
@@ -356,7 +356,7 @@ class AMIE2JIRA():
         if not self.no_post:
             r = requests.post(self.jira_url, headers=jira_headers, json=epic)
             if not r.ok:
-                self.logger.info('Error in Jira Response {}'.format((r)))
+                self.logger.info('Error in Jira Response {}'.format(r))
                 #continue
                 return
         else:
@@ -366,7 +366,7 @@ class AMIE2JIRA():
 
         jira_issue_id = r.json()['key']
         jira_json = json.dumps(r.json())
-        self.logger.debug('Jira Response Json {}'.format((jira_json)))
+        self.logger.debug('Jira Response Json {}'.format(jira_json))
 
         try: 
             self.ecss_client.set_packet_client_json(packet, jira_json)
@@ -387,7 +387,7 @@ class AMIE2JIRA():
             npc.PiRemoteSiteLogin = PiPersonID
             npc.ProjectID=packet.GrantNumber
         if not npc.missing_attributes():
-            self.logger.info('Sending NPC for {}:PiPersonID {} PiRemoteSiteLogin {} ProjectID {}'.format((packet.packet_id, PiPersonID, PiPersonID, packet.GrantNumber)))
+            self.logger.info('Sending NPC for {} : PiPersonID {} PiRemoteSiteLogin {} ProjectID {}'.format(packet.packet_id, PiPersonID, PiPersonID, packet.GrantNumber))
             if not self.no_npc:
                 self.ecss_client.send_packet(npc)        
                 return
@@ -396,7 +396,7 @@ class AMIE2JIRA():
                 #continue
                 return
         else:
-            self.logger.info('Cannot send NPC for {}: missing {}'.format((packet.packet_id, npc.missing_attributes())))
+            self.logger.info('Cannot send NPC for {}: missing {}'.format(packet.packet_id, npc.missing_attributes()))
             return
 
 
