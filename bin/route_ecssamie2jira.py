@@ -349,6 +349,9 @@ class AMIE2JIRA():
            "assignee" : {"name":"mbland"}
            }
         }
+        #Remove requestmechanism if it isn't in allowed values
+        if requestmechanism =="":
+           epic["fields"].pop("customfield_12028", None)
 
         self.logger.debug('Epic Json {}'.format((json.dumps(epic))))
 
