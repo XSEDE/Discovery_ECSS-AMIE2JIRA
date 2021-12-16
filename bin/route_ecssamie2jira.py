@@ -189,7 +189,7 @@ class AMIE2JIRA():
         # Load configuration file
         self.config = ConfigParser(allow_no_value=True)
         try:
-            self.config.read('conf/config.ini')
+            self.config.read('/soft/warehouse-apps-1.0/ECSS-AMIE2JIRA/conf/config.ini.conf')
         except IOError as e:
             eprint('Error "{}" reading config={}'.format(e, config_path))
             sys.exit(1)
