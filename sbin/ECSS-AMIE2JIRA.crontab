@@ -1,2 +1,1 @@
-*/30 0-3,12-23 * * * /bin/bash -l -c "/soft/warehouse-apps-1.0/ECSS-AMIE2JIRA/PROD/bin/route-ecssamie2jira.sh start"
-
+0 6,18 * * * /bin/bash -l -c "/soft/warehouse-apps-1.0/ECSS-AMIE2JIRA/PROD/sbin/route_ecssamie2jira.sh start"
