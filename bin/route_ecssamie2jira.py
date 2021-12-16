@@ -416,7 +416,7 @@ class AMIE2JIRA():
         self.process_packets()
 
 
-        return(1)
+        return
 
 if __name__ == '__main__':
     program = AMIE2JIRA()
