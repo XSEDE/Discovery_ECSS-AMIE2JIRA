@@ -45,6 +45,7 @@ export DJANGO_SETTINGS_MODULE=xsede_warehouse.settings
 do_start () {
     echo "Starting ${APP_NAME}:"
     echo "${PYTHON_BIN} ${APP_BIN} $@ ${APP_OPTS}"
+    cd ${APP_BASE}
     ${PYTHON_BIN} ${APP_BIN} $@ ${APP_OPTS}
     RETVAL=$?
 }
